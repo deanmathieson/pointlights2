@@ -18,6 +18,8 @@ export default {
       controls: "",
       pointlight: "",
       pointlight2: "",
+      pointlights: [],
+      amountOfLights: 10,
     };
   },
   methods: {
@@ -79,9 +81,12 @@ export default {
       return light;
     },
     setUpLights() {
-      this.pointlight = this.createLight(0x0088ff);
-      this.pointlight2 = this.createLight(0xff8888);
-      this.scene.add(this.pointlight, this.pointlight2);
+      for (let i = 0; i < this.amountOfLights; i++) {
+        this.pointlights.push(this.createLight(this.colourGenerator()));
+      }
+      this.pointlights.forEach((pointlight) => {
+        this.scene.add(pointlight);
+      });
     },
     setUpControls() {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -119,23 +124,16 @@ export default {
     },
     render() {
       let time = performance.now() * 0.001;
+      this.pointlights.forEach((pointlight) => {
+        pointlight.position.x = Math.sin(time * 0.6) * 9;
+        pointlight.position.y = Math.sin(time * 0.7) * 9 + 6;
+        pointlight.position.z = Math.sin(time * 0.8) * 9;
 
-      this.pointlight.position.x = Math.sin(time * 0.6) * 9;
-      this.pointlight.position.y = Math.sin(time * 0.7) * 9 + 6;
-      this.pointlight.position.z = Math.sin(time * 0.8) * 9;
+        pointlight.rotation.x = time;
+        pointlight.rotation.z = time;
 
-      this.pointlight.rotation.x = time;
-      this.pointlight.rotation.z = time;
-
-      time += 10000;
-
-      this.pointlight2.position.x = Math.sin(time * 0.6) * 9;
-      this.pointlight2.position.y = Math.sin(time * 0.7) * 9 + 6;
-      this.pointlight2.position.z = Math.sin(time * 0.8) * 9;
-
-      this.pointlight2.rotation.x = time;
-      this.pointlight2.rotation.z = time;
-
+        time += 10000;
+      });
       this.renderer.render(this.scene, this.camera);
 
       this.stats.update();
@@ -152,6 +150,9 @@ export default {
     },
     setUpResizeHandler() {
       window.addEventListener("resize", this.onWindowResize);
+    },
+    colourGenerator() {
+      return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
     },
   },
   mounted() {
