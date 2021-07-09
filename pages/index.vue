@@ -1,5 +1,9 @@
 <template>
-  <body style="display: flex; margin: 0"></body>
+  <body style="display: flex; margin: 0">
+    <div class="buttonCont">
+      <button id="">am a button</button>
+    </div>
+  </body>
 </template>
 
 <script>
@@ -45,7 +49,6 @@ export default {
     },
     createLight(color) {
       const intensity = 3;
-      console.log(color);
       const light = new THREE.PointLight(color, intensity, 20);
       light.castShadow = true;
       light.shadow.bias = -0.005; // reduces self-shadowing on double-sided objects
@@ -60,10 +63,10 @@ export default {
       texture.magFilter = THREE.NearestFilter;
       texture.wrapT = THREE.RepeatWrapping;
       texture.wrapS = THREE.RepeatWrapping;
-      texture.rotation = 90;
+      texture.rotation = 180;
       texture.repeat.set(1, 5.5);
 
-      geometry = new THREE.CylinderGeometry(3, 3, 32, 8);
+      geometry = new THREE.SphereGeometry(3, 32, 8);
       material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
         alphaMap: texture,
@@ -123,20 +126,19 @@ export default {
       var loader = new THREE.FontLoader();
 
       loader.load(
-        "https://cdn.rawgit.com/mrdoob/three.js/master/examples/fonts/helvetiker_regular.typeface.json",
+        "https://cdn.rawgit.com/mrdoob/three.js/master/examples/fonts/helvetiker_bold.typeface.json",
         (font) => {
-          var textGeo = new THREE.TextGeometry("DEAN MATHIESON", {
+          var textGeo = new THREE.TextGeometry("DEAN  MATHIESON", {
             font: font,
-
-            size: 2,
-            height: 1,
-            curveSegments: 12,
+            size: 1,
+            height: 0.1,
           });
 
-          var textMaterial = new THREE.MeshPhongMaterial({ color: 0xff00cc });
+          var textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
 
           var mesh = new THREE.Mesh(textGeo, textMaterial);
-          mesh.position.set(-10, 0, 10);
+          mesh.name = "textmesh";
+          mesh.position.set(0, 5, 15);
 
           this.scene.add(mesh);
         }
@@ -160,7 +162,13 @@ export default {
         pointlight.position.z = Math.sin(time * 0.8) * 9;
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
-
+        let textmesh = this.scene.getObjectByName("textmesh");
+        if (textmesh) {
+          let rotation = this.camera.rotation;
+          textmesh.rotation.x = rotation._x;
+          textmesh.rotation.y = rotation._y;
+          textmesh.rotation.z = rotation._z;
+        }
         time += 50000;
       });
       this.renderer.render(this.scene, this.camera);
@@ -181,8 +189,12 @@ export default {
       window.addEventListener("resize", this.onWindowResize);
     },
     colourGenerator() {
-      let random = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-      if (random) return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      let random = "";
+      while (random.length !== 7) {
+        random = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      }
+      console.log(random.length);
+      return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
     },
   },
   mounted() {
@@ -190,7 +202,7 @@ export default {
     this.setUpLights();
     this.setUpRenderer();
     this.setUpControls();
-    // this.setUpStats();
+    this.setUpStats();
     this.setUpMesh();
     this.setUpText();
     this.setUpResizeHandler();
@@ -198,3 +210,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.buttonCont {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+</style>
