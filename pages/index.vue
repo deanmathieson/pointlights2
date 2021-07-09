@@ -60,7 +60,6 @@ export default {
       texture.magFilter = THREE.NearestFilter;
       texture.wrapT = THREE.RepeatWrapping;
       texture.wrapS = THREE.RepeatWrapping;
-      console.log(texture);
       texture.rotation = 90;
       texture.repeat.set(1, 5.5);
 
@@ -145,20 +144,19 @@ export default {
     },
     generateTexture() {
       const canvas = document.createElement("canvas");
-      canvas.width = 2;
-      canvas.height = 2;
+      canvas.width = 64;
+      canvas.height = 16;
 
       const context = canvas.getContext("2d");
-      context.globalAlpha = 1;
-      context.beginPath();
       context.fillStyle = "#ffffff";
-      context.fillRect(0, 1, canvas.width, canvas.height);
-      context.strokeStyle = "#ff00ff";
-      context.strokeRect(0, 0, canvas.width, canvas.height);
-      context.font = "2pt Arial";
-      context.fillText("DEAN", 0, 30);
-      context.fill();
-      // console.log(context);
+      // context.fillRect(0, 1, canvas.width, canvas.height);
+      // context.strokeStyle = "#ff0000";
+      // context.strokeRect(0, 0, canvas.width, canvas.height);
+      context.font = 10 + "pt Arial";
+      console.log(canvas.width);
+      context.fillText("DEAN", 0, canvas.height / 2 + 4);
+      document.body.appendChild(canvas);
+
       return canvas;
     },
     render() {
@@ -167,7 +165,6 @@ export default {
         pointlight.position.x = Math.sin(time * 0.6) * 9;
         pointlight.position.y = Math.sin(time * 0.7) * 9 + 6;
         pointlight.position.z = Math.sin(time * 0.8) * 9;
-        console.log(pointlight);
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
 
@@ -199,7 +196,7 @@ export default {
     this.setUpLights();
     this.setUpRenderer();
     this.setUpControls();
-    this.setUpStats();
+    // this.setUpStats();
     this.setUpMesh();
     this.setUpText();
     this.setUpResizeHandler();
