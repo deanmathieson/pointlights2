@@ -44,13 +44,13 @@ export default {
       document.body.appendChild(this.renderer.domElement);
     },
     createLight(color) {
-      const intensity = 15;
-
+      const intensity = 3;
+      console.log(color);
       const light = new THREE.PointLight(color, intensity, 20);
       light.castShadow = true;
       light.shadow.bias = -0.005; // reduces self-shadowing on double-sided objects
 
-      let geometry = new THREE.SphereGeometry(1.8, 12, 6);
+      let geometry = new THREE.SphereGeometry(1.5, 12, 6);
       let material = new THREE.MeshBasicMaterial({ color: color });
       material.color.multiplyScalar(intensity);
       let sphere = new THREE.Mesh(geometry, material);
@@ -63,7 +63,7 @@ export default {
       texture.rotation = 90;
       texture.repeat.set(1, 5.5);
 
-      geometry = new THREE.SphereGeometry(3, 32, 8);
+      geometry = new THREE.CylinderGeometry(3, 3, 32, 8);
       material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
         alphaMap: texture,
@@ -181,7 +181,8 @@ export default {
       window.addEventListener("resize", this.onWindowResize);
     },
     colourGenerator() {
-      return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      let random = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      if (random) return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
     },
   },
   mounted() {
