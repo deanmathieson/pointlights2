@@ -8,6 +8,8 @@ import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+import { FontLoader } from "three/examples/fonts/helvetiker_bold.typeface.json";
 export default {
   data() {
     return {
@@ -19,7 +21,8 @@ export default {
       pointlight: "",
       pointlight2: "",
       pointlights: [],
-      amountOfLights: 10,
+      amountOfLights: 1,
+      boxSize: 30,
     };
   },
   methods: {
@@ -47,7 +50,7 @@ export default {
       light.castShadow = true;
       light.shadow.bias = -0.005; // reduces self-shadowing on double-sided objects
 
-      let geometry = new THREE.SphereGeometry(0.3, 12, 6);
+      let geometry = new THREE.SphereGeometry(1.8, 12, 6);
       let material = new THREE.MeshBasicMaterial({ color: color });
       material.color.multiplyScalar(intensity);
       let sphere = new THREE.Mesh(geometry, material);
@@ -57,9 +60,11 @@ export default {
       texture.magFilter = THREE.NearestFilter;
       texture.wrapT = THREE.RepeatWrapping;
       texture.wrapS = THREE.RepeatWrapping;
-      texture.repeat.set(1, 4.5);
+      console.log(texture);
+      texture.rotation = 90;
+      texture.repeat.set(1, 5.5);
 
-      geometry = new THREE.SphereGeometry(2, 32, 8);
+      geometry = new THREE.SphereGeometry(3, 32, 8);
       material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
         alphaMap: texture,
@@ -97,7 +102,11 @@ export default {
       document.body.appendChild(this.stats.dom);
     },
     setUpMesh() {
-      const geometry = new THREE.BoxGeometry(30, 30, 30);
+      const geometry = new THREE.BoxGeometry(
+        this.boxSize,
+        this.boxSize,
+        this.boxSize
+      );
 
       const material = new THREE.MeshPhongMaterial({
         color: 0xa0adaf,
@@ -111,15 +120,45 @@ export default {
       mesh.receiveShadow = true;
       this.scene.add(mesh);
     },
+    setUpText() {
+      var loader = new THREE.FontLoader();
+
+      loader.load(
+        "https://cdn.rawgit.com/mrdoob/three.js/master/examples/fonts/helvetiker_regular.typeface.json",
+        (font) => {
+          var textGeo = new THREE.TextGeometry("DEAN MATHIESON", {
+            font: font,
+
+            size: 2,
+            height: 1,
+            curveSegments: 12,
+          });
+
+          var textMaterial = new THREE.MeshPhongMaterial({ color: 0xff00cc });
+
+          var mesh = new THREE.Mesh(textGeo, textMaterial);
+          mesh.position.set(-10, 0, 10);
+
+          this.scene.add(mesh);
+        }
+      );
+    },
     generateTexture() {
       const canvas = document.createElement("canvas");
       canvas.width = 2;
       canvas.height = 2;
 
       const context = canvas.getContext("2d");
-      context.fillStyle = "white";
-      context.fillRect(0, 1, 2, 1);
-
+      context.globalAlpha = 1;
+      context.beginPath();
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 1, canvas.width, canvas.height);
+      context.strokeStyle = "#ff00ff";
+      context.strokeRect(0, 0, canvas.width, canvas.height);
+      context.font = "2pt Arial";
+      context.fillText("DEAN", 0, 30);
+      context.fill();
+      // console.log(context);
       return canvas;
     },
     render() {
@@ -128,7 +167,7 @@ export default {
         pointlight.position.x = Math.sin(time * 0.6) * 9;
         pointlight.position.y = Math.sin(time * 0.7) * 9 + 6;
         pointlight.position.z = Math.sin(time * 0.8) * 9;
-
+        console.log(pointlight);
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
 
@@ -162,6 +201,7 @@ export default {
     this.setUpControls();
     this.setUpStats();
     this.setUpMesh();
+    this.setUpText();
     this.setUpResizeHandler();
     this.animate();
   },
