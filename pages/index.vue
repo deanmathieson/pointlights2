@@ -146,17 +146,10 @@ export default {
       const canvas = document.createElement("canvas");
       canvas.width = 64;
       canvas.height = 16;
-
       const context = canvas.getContext("2d");
       context.fillStyle = "#ffffff";
-      // context.fillRect(0, 1, canvas.width, canvas.height);
-      // context.strokeStyle = "#ff0000";
-      // context.strokeRect(0, 0, canvas.width, canvas.height);
       context.font = 10 + "pt Arial";
-      console.log(canvas.width);
       context.fillText("DEAN", 0, canvas.height / 2 + 4);
-      document.body.appendChild(canvas);
-
       return canvas;
     },
     render() {
