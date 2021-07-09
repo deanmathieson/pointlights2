@@ -44,7 +44,7 @@ export default {
       document.body.appendChild(this.renderer.domElement);
     },
     createLight(color) {
-      const intensity = 1.5;
+      const intensity = 15;
 
       const light = new THREE.PointLight(color, intensity, 20);
       light.castShadow = true;
@@ -161,7 +161,7 @@ export default {
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
 
-        time += 10000;
+        time += 50000;
       });
       this.renderer.render(this.scene, this.camera);
 
