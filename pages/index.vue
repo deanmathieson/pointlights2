@@ -21,7 +21,7 @@ export default {
       pointlight: "",
       pointlight2: "",
       pointlights: [],
-      amountOfLights: 1,
+      amountOfLights: 3,
       boxSize: 30,
     };
   },
@@ -144,12 +144,12 @@ export default {
     },
     generateTexture() {
       const canvas = document.createElement("canvas");
-      canvas.width = 64;
+      canvas.width = 200;
       canvas.height = 16;
       const context = canvas.getContext("2d");
       context.fillStyle = "#ffffff";
       context.font = 10 + "pt Arial";
-      context.fillText("DEAN", 0, canvas.height / 2 + 4);
+      context.fillText("DEAN MATHIESON", 0, canvas.height / 2 + 4);
       return canvas;
     },
     render() {
