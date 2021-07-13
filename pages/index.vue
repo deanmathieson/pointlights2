@@ -13,7 +13,6 @@ import Stats from "three/examples/jsm/libs/stats.module.js";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import { FontLoader } from "three/examples/fonts/helvetiker_bold.typeface.json";
 export default {
   data() {
     return {
@@ -27,6 +26,7 @@ export default {
       pointlights: [],
       amountOfLights: 3,
       boxSize: 30,
+      ratio: window.innerWidth / window.innerHeight,
     };
   },
   methods: {
@@ -105,7 +105,7 @@ export default {
     },
     setUpMesh() {
       const geometry = new THREE.BoxGeometry(
-        this.boxSize,
+        (this.boxSize * window.innerWidth) / window.innerHeight,
         this.boxSize,
         this.boxSize
       );
@@ -124,21 +124,24 @@ export default {
     },
     setUpText() {
       var loader = new THREE.FontLoader();
-
       loader.load(
         "https://cdn.rawgit.com/mrdoob/three.js/master/examples/fonts/helvetiker_bold.typeface.json",
         (font) => {
           var textGeo = new THREE.TextGeometry("DEAN  MATHIESON", {
             font: font,
-            size: 1,
+            size: 0.8 * this.ratio,
             height: 0.1,
           });
 
           var textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
-
           var mesh = new THREE.Mesh(textGeo, textMaterial);
           mesh.name = "textmesh";
-          mesh.position.set(0, 5, 15);
+
+          let x = -(1 * this.ratio),
+            y = 5,
+            z = 15;
+
+          mesh.position.set(x, y, z);
 
           this.scene.add(mesh);
         }
@@ -157,8 +160,8 @@ export default {
     render() {
       let time = performance.now() * 0.001;
       this.pointlights.forEach((pointlight) => {
-        pointlight.position.x = Math.sin(time * 0.6) * 9;
-        pointlight.position.y = Math.sin(time * 0.7) * 9 + 6;
+        pointlight.position.x = Math.sin(time * 0.6) * (9 * this.ratio);
+        pointlight.position.y = Math.sin(time * 0.7) * (9 / this.ratio) + 10;
         pointlight.position.z = Math.sin(time * 0.8) * 9;
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
@@ -193,8 +196,7 @@ export default {
       while (random.length !== 7) {
         random = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
       }
-      console.log(random.length);
-      return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      return random;
     },
   },
   mounted() {
