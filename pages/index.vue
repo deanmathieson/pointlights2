@@ -17,7 +17,7 @@
         {{ button.name }}
       </button>
     </div>
-    <div class="modal z-10 invisible p-10 m-10 h-max w-max" ref="mainModal">
+    <div class="modal z-10 invisible p-2 w-full max-w-max" ref="mainModal">
       <header>
         <p class="text-4xl">
           🧔🏻 Welcome to my website
@@ -69,10 +69,23 @@
         </div>
       </section>
     </div>
-    <div class="modal z-10 invisible p-10 m-10 h-max w-max" ref="contactModal">
-      <header>
-        <p class="text-4xl">CONTACT ME</p>
-      </header>
+    <div class="modal z-10 invisible p-2 w-full max-w-max" ref="contactModal">
+      <form name="contactus" method="post" netlify netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contactus" />
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" name="name" required />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" name="email" required />
+        </div>
+        <div>
+          <label for="message">Message:</label>
+          <textarea name="message" required></textarea>
+        </div>
+        <button type="submit" value="Send message">Send</button>
+      </form>
     </div>
   </body>
 </template>
@@ -449,9 +462,7 @@ button {
 .modal {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
-  max-width: 600px;
   flex-wrap: wrap;
-  max-height: 600px;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
