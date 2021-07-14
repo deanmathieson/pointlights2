@@ -17,7 +17,7 @@
         {{ button.name }}
       </button>
     </div>
-    <div class="modal z-10 invisible p-10 m-10" ref="mainModal">
+    <div class="modal z-10 invisible p-10 m-10 h-max w-max" ref="mainModal">
       <header>
         <p class="text-4xl">
           🚀 Welcome to my website
@@ -49,7 +49,7 @@
       </section>
       <section class="p-4 w-full">
         <h2 class="text-2xl">Skills</h2>
-        <div class="skills flex flex-row">
+        <div class="skills flex flex-row flex-wrap">
           <button
             class="border-2 rounded-3xl bg-black"
             v-for="(skill, i) in skills"
@@ -69,7 +69,7 @@
         </div>
       </section>
     </div>
-    <div class="modal z-10 invisible p-10 m-10" ref="contactModal">
+    <div class="modal z-10 invisible p-10 m-10 h-max w-max" ref="contactModal">
       <header>
         <p class="text-4xl">CONTACT ME</p>
       </header>
@@ -109,6 +109,8 @@ export default {
         { name: "nuxt" },
         { name: "flutter" },
         { name: "vue" },
+        { name: "three.js" },
+        { name: "gsap" },
       ],
     };
   },
@@ -314,9 +316,27 @@ export default {
             top: "50%",
             left: "50%",
             opacity: 1,
+            onComplete: () => {
+              let delay = 0;
+              modal.children.forEach((item) => {
+                gsap.to(item, { opacity: 1, duration: 0.5, delay: delay });
+                delay = delay + 0.4;
+              });
+            },
           }
         );
       else {
+        let delay = 0;
+        let i = modal.children.length;
+        while (i !== 0) {
+          gsap.to(modal.children[i - 1], {
+            opacity: 0,
+            duration: 0.5,
+            delay: delay,
+          });
+          delay = delay + 0.2;
+          i--;
+        }
         gsap.fromTo(
           modal,
           { top: "50%", left: "50%" },
@@ -324,12 +344,24 @@ export default {
             top: buttonLocation.top,
             left: buttonLocation.left,
             opacity: 0,
+            delay: delay + 0.2,
           }
         );
       }
       //modal tidy up
       modals.forEach((mod) => {
         if (mod.showing && mod !== modal) {
+          let delay = 0;
+          let i = mod.children.length;
+          while (i !== 0) {
+            gsap.to(mod.children[i - 1], {
+              opacity: 0,
+              duration: 0.5,
+              delay: delay,
+            });
+            delay = delay + 0.2;
+            i--;
+          }
           gsap.fromTo(
             mod,
             { top: "50%", left: "50%" },
@@ -337,6 +369,7 @@ export default {
               top: buttonLocation.top,
               left: buttonLocation.left,
               opacity: 0,
+              delay: delay + 0.2,
             }
           );
           mod.showing = !mod.showing;
@@ -413,6 +446,7 @@ button {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
   max-width: 600px;
+  flex-wrap: wrap;
   max-height: 600px;
   transform: translate(-50%, -50%);
   display: flex;
@@ -420,5 +454,8 @@ button {
   justify-content: center;
   color: white;
   flex-direction: column;
+}
+.modal > * {
+  opacity: 0;
 }
 </style>
