@@ -35,7 +35,7 @@
         </p>
       </header>
 
-      <section class="m-4">
+      <section class="m-4 pt-8">
         <h2 class="text-2xl">Manifesto</h2>
         <p>I am a Front-End Developer with a passion for my trade.</p>
         <p>
@@ -51,11 +51,20 @@
         <h2 class="text-2xl">Skills</h2>
         <div class="skills flex flex-row">
           <button
-            class="border-2 rounded-3xl"
+            class="border-2 rounded-3xl bg-black"
             v-for="(skill, i) in skills"
             :key="i"
+            ref="skillsBtn"
+            @mouseenter="skillsAnimation(i)"
           >
-            {{ skill.name }}
+            <span
+              class="letter"
+              :class="'letter' + i"
+              v-for="(letter, i) in skill.name"
+              :key="i"
+              ref="letters"
+              >{{ letter }}</span
+            >
           </button>
         </div>
       </section>
@@ -289,16 +298,36 @@ export default {
       });
     },
     buttonClick(i) {
-      let modal = this.$refs.contactModal;
-      if (i === 0) {
-        modal = this.$refs.mainModal;
-      }
-      if (!modal.showing) {
-        gsap.to(modal, { visibility: "visible" });
-        modal.showing = true;
-      } else {
-        gsap.to(modal, { visibility: "hidden" });
-        modal.showing = false;
+      let modal = i === 0 ? this.$refs.mainModal : this.$refs.contactModal;
+      let visible = modal.showing ? "hidden" : "visible";
+      modal.showing = !modal.showing;
+      gsap.fromTo(modal, { x: -50, y: 50 }, { visible: visible });
+    },
+    skillsAnimation(i) {
+      let delay = 0.2;
+      this.$refs.skillsBtn[i].children.forEach((letter) => {
+        if (!letter.animating) {
+          gsap.to(letter, {
+            color: this.colourGenerator(),
+            delay: delay,
+            yoyo: true,
+            duration: 1,
+            repeat: 1,
+            onStart: () => (letter.animating = true),
+            onComplete: () => (letter.animating = false),
+          });
+          delay = delay + 0.2;
+        }
+      });
+      if (!this.$refs.skillsBtn[i].animating) {
+        gsap.to(this.$refs.skillsBtn[i], {
+          borderColor: this.colourGenerator(),
+          yoyo: true,
+          duration: 2,
+          repeat: 1,
+          onStart: () => (this.$refs.skillsBtn[i].animating = true),
+          onComplete: () => (this.$refs.skillsBtn[i].animating = false),
+        });
       }
     },
   },
