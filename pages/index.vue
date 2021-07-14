@@ -247,7 +247,7 @@ export default {
       let time = performance.now() * 0.001;
       this.pointlights.forEach((pointlight) => {
         pointlight.position.x = Math.sin(time * 0.6) * (9 * this.ratio);
-        pointlight.position.y = Math.sin(time * 0.7) * (9 / this.ratio) + 10;
+        pointlight.position.y = Math.sin(time * 0.7) * 9 + 10;
         pointlight.position.z = Math.sin(time * 0.8) * 9;
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
