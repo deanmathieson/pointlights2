@@ -20,7 +20,7 @@
     <div class="modal z-10 invisible p-10 m-10 h-max w-max" ref="mainModal">
       <header>
         <p class="text-4xl">
-          🚀 Welcome to my website
+          🧔🏻 Welcome to my website
           <span
             style="
               -moz-transform: scale(-1, 1);
@@ -30,7 +30,7 @@
               transform: scale(-1, 1);
             "
             class="inline-block"
-            >🚀
+            >🧔🏻
           </span>
         </p>
       </header>
@@ -150,7 +150,8 @@ export default {
       texture.wrapS = THREE.RepeatWrapping;
       texture.rotation = 180;
       texture.repeat.set(1, 5.5);
-
+      texture.flipX = false;
+      texture.flipY = false;
       geometry = new THREE.SphereGeometry(3, 32, 8);
       material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
@@ -210,7 +211,7 @@ export default {
     setUpText() {
       var loader = new THREE.FontLoader();
       loader.load(
-        "https://cdn.rawgit.com/mrdoob/three.js/master/examples/fonts/helvetiker_bold.typeface.json",
+        "https://cdn.skypack.dev/three/examples/fonts/helvetiker_bold.typeface.json",
         (font) => {
           var textGeo = new THREE.TextGeometry("DEAN  MATHIESON", {
             font: font,
@@ -238,7 +239,7 @@ export default {
       canvas.height = 16;
       const context = canvas.getContext("2d");
       context.fillStyle = "#ffffff";
-      context.font = 10 + "pt Arial";
+      context.font = 10 + "pt Roboto";
       context.fillText("DEAN MATHIESON", 0, canvas.height / 2 + 4);
       return canvas;
     },
@@ -429,7 +430,10 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
+* {
+  font-family: "Roboto", sans;
+}
 .buttonCont {
   position: absolute;
   top: 0;
