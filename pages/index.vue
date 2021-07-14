@@ -69,20 +69,21 @@
         </div>
       </section>
     </div>
-    <div class="modal z-10 invisible p-2 w-full max-w-max" ref="contactModal">
+    <div class="modal z-10 invisible p-4 w-full max-w-max" ref="contactModal">
+      <p class="text-4xl">Contact me</p>
       <form name="contactus" method="post" netlify netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="contactus" />
-        <div>
-          <label for="name">Name:</label>
-          <input type="text" name="name" required />
+        <div class="p-2">
+          <label class="text-large" for="name">Name:</label>
+          <input class="text-black" type="text" name="name" required />
         </div>
-        <div>
-          <label for="email">Email:</label>
-          <input type="email" name="email" required />
+        <div class="p-2">
+          <label class="text-large" for="email">Email:</label>
+          <input class="text-black" type="email" name="email" required />
         </div>
-        <div>
-          <label for="message">Message:</label>
-          <textarea name="message" required></textarea>
+        <div class="p-2">
+          <label class="text-large" for="message">Message:</label>
+          <textarea class="text-black" name="message" required></textarea>
         </div>
         <button type="submit" value="Send message">Send</button>
       </form>
@@ -472,5 +473,20 @@ button {
 }
 .modal > * {
   opacity: 0;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+form label {
+  width: 40%;
+}
+form input {
+  width: 60%;
+}
+form div {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
