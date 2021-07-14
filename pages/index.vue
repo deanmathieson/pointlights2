@@ -17,7 +17,7 @@
         {{ button.name }}
       </button>
     </div>
-    <div class="modal z-10 invisible" ref="mainModal">
+    <div class="modal z-10 invisible p-10 m-10" ref="mainModal">
       <header>
         <p class="text-4xl">
           🚀 Welcome to my website
@@ -69,7 +69,7 @@
         </div>
       </section>
     </div>
-    <div class="modal z-10 invisible" ref="contactModal">
+    <div class="modal z-10 invisible p-10 m-10" ref="contactModal">
       <header>
         <p class="text-4xl">CONTACT ME</p>
       </header>
@@ -301,46 +301,84 @@ export default {
       let buttonLocation = this.$refs.buttons[i].getBoundingClientRect();
       let modal = i === 0 ? this.$refs.mainModal : this.$refs.contactModal;
       let visible = modal.showing ? "hidden" : "visible";
+      let modals = [this.$refs.mainModal, this.$refs.contactModal];
       if (!modal.showing)
         gsap.fromTo(
           modal,
-          { top: buttonLocation.top, left: buttonLocation.left },
-          { visibility: visible, top: "50%", left: "50%", opacity: 1 }
+          {
+            top: buttonLocation.top,
+            left: buttonLocation.left,
+          },
+          {
+            visibility: visible,
+            top: "50%",
+            left: "50%",
+            opacity: 1,
+          }
         );
       else {
         gsap.fromTo(
           modal,
           { top: "50%", left: "50%" },
-          { top: buttonLocation.top, left: buttonLocation.left, opacity: 0 }
+          {
+            top: buttonLocation.top,
+            left: buttonLocation.left,
+            opacity: 0,
+          }
         );
       }
+      //modal tidy up
+      modals.forEach((mod) => {
+        if (mod.showing && mod !== modal) {
+          gsap.fromTo(
+            mod,
+            { top: "50%", left: "50%" },
+            {
+              top: buttonLocation.top,
+              left: buttonLocation.left,
+              opacity: 0,
+            }
+          );
+          mod.showing = !mod.showing;
+        }
+      });
       modal.showing = !modal.showing;
     },
     skillsAnimation(i) {
       let delay = 0.2;
       this.$refs.skillsBtn[i].children.forEach((letter) => {
         if (!letter.animating) {
-          gsap.to(letter, {
-            color: this.colourGenerator(),
-            delay: delay,
-            yoyo: true,
-            duration: 1,
-            repeat: 1,
-            onStart: () => (letter.animating = true),
-            onComplete: () => (letter.animating = false),
-          });
+          gsap.fromTo(
+            letter,
+            { color: "#fff" },
+            {
+              color: this.colourGenerator(),
+              delay: delay,
+              yoyo: true,
+              duration: 1,
+              repeat: 1,
+              onStart: () => (letter.animating = true),
+              onComplete: () => (letter.animating = false),
+            }
+          );
           delay = delay + 0.2;
         }
       });
       if (!this.$refs.skillsBtn[i].animating) {
-        gsap.to(this.$refs.skillsBtn[i], {
-          borderColor: this.colourGenerator(),
-          yoyo: true,
-          duration: 2,
-          repeat: 1,
-          onStart: () => (this.$refs.skillsBtn[i].animating = true),
-          onComplete: () => (this.$refs.skillsBtn[i].animating = false),
-        });
+        gsap.fromTo(
+          this.$refs.skillsBtn[i],
+          {
+            borderColor: "#fff",
+          },
+          {
+            borderColor: this.colourGenerator(),
+            yoyo: true,
+            duration: 2,
+            repeat: 1,
+            onStart: () => (this.$refs.skillsBtn[i].animating = true),
+            onComplete: () => (this.$refs.skillsBtn[i].animating = false),
+          }
+        );
       }
     },
   },
@@ -373,8 +411,6 @@ button {
 }
 .modal {
   position: fixed;
-  width: 100vw;
-  height: 100vh;
   background-color: rgba(0, 0, 0, 0.8);
   max-width: 600px;
   max-height: 600px;
