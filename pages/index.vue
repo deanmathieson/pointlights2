@@ -298,10 +298,23 @@ export default {
       });
     },
     buttonClick(i) {
+      let buttonLocation = this.$refs.buttons[i].getBoundingClientRect();
       let modal = i === 0 ? this.$refs.mainModal : this.$refs.contactModal;
       let visible = modal.showing ? "hidden" : "visible";
+      if (!modal.showing)
+        gsap.fromTo(
+          modal,
+          { top: buttonLocation.top, left: buttonLocation.left },
+          { visibility: visible, top: "50%", left: "50%", opacity: 1 }
+        );
+      else {
+        gsap.fromTo(
+          modal,
+          { top: "50%", left: "50%" },
+          { top: buttonLocation.top, left: buttonLocation.left, opacity: 0 }
+        );
+      }
       modal.showing = !modal.showing;
-      gsap.fromTo(modal, { x: -50, y: 50 }, { visible: visible });
     },
     skillsAnimation(i) {
       let delay = 0.2;
@@ -366,8 +379,6 @@ button {
   max-width: 600px;
   max-height: 600px;
   transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
