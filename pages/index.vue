@@ -1,13 +1,76 @@
 <template>
   <body style="display: flex; margin: 0">
-    <div class="buttonCont">
-      <button id="">am a button</button>
+    <div class="buttonCont z-20">
+      <button
+        :style="{
+          backgroundColor: secondaryColor,
+          border: '3px solid ' + mainColor,
+          color: mainColor,
+        }"
+        v-for="(button, i) in buttons"
+        :key="i"
+        @mouseenter="buttonEntryAnimation(i)"
+        @mouseleave="buttonExitAnimation(i)"
+        @click="buttonClick(i)"
+        ref="buttons"
+      >
+        {{ button.name }}
+      </button>
+    </div>
+    <div class="modal z-10 invisible" ref="mainModal">
+      <header>
+        <p class="text-4xl">
+          🚀 Welcome to my website
+          <span
+            style="
+              -moz-transform: scale(-1, 1);
+              -webkit-transform: scale(-1, 1);
+              -o-transform: scale(-1, 1);
+              -ms-transform: scale(-1, 1);
+              transform: scale(-1, 1);
+            "
+            class="inline-block"
+            >🚀
+          </span>
+        </p>
+      </header>
+
+      <section class="m-4">
+        <h2 class="text-2xl">Manifesto</h2>
+        <p>I am a Front-End Developer with a passion for my trade.</p>
+        <p>
+          I am a practical, creative thinker who follows the motto "work
+          smarter".
+        </p>
+        <p>
+          I am an innovative and enthusiastic developer who enjoys engaging and
+          encouraging colleagues to maximise potential.
+        </p>
+      </section>
+      <section class="p-4 w-full">
+        <h2 class="text-2xl">Skills</h2>
+        <div class="skills flex flex-row">
+          <button
+            class="border-2 rounded-3xl"
+            v-for="(skill, i) in skills"
+            :key="i"
+          >
+            {{ skill.name }}
+          </button>
+        </div>
+      </section>
+    </div>
+    <div class="modal z-10 invisible" ref="contactModal">
+      <header>
+        <p class="text-4xl">CONTACT ME</p>
+      </header>
     </div>
   </body>
 </template>
 
 <script>
 import * as THREE from "three";
+import gsap from "gsap";
 
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
@@ -27,6 +90,17 @@ export default {
       amountOfLights: 3,
       boxSize: 30,
       ratio: window.innerWidth / window.innerHeight,
+      mainColor: "#000",
+      secondaryColor: "#fff",
+      buttons: [{ name: "Info" }, { name: "Contact" }],
+      skills: [
+        { name: "javascript" },
+        { name: "html5" },
+        { name: "css" },
+        { name: "nuxt" },
+        { name: "flutter" },
+        { name: "vue" },
+      ],
     };
   },
   methods: {
@@ -198,7 +272,37 @@ export default {
       }
       return random;
     },
+    buttonEntryAnimation(i) {
+      gsap.to(this.$refs.buttons[i], {
+        backgroundColor: this.mainColor,
+        borderColor: this.secondaryColor,
+        color: this.secondaryColor,
+        duration: 0.8,
+      });
+    },
+    buttonExitAnimation(i) {
+      gsap.to(this.$refs.buttons[i], {
+        backgroundColor: this.secondaryColor,
+        borderColor: this.mainColor,
+        color: this.mainColor,
+        duration: 0.8,
+      });
+    },
+    buttonClick(i) {
+      let modal = this.$refs.contactModal;
+      if (i === 0) {
+        modal = this.$refs.mainModal;
+      }
+      if (!modal.showing) {
+        gsap.to(modal, { visibility: "visible" });
+        modal.showing = true;
+      } else {
+        gsap.to(modal, { visibility: "hidden" });
+        modal.showing = false;
+      }
+    },
   },
+
   mounted() {
     this.setUpCamera();
     this.setUpLights();
@@ -217,5 +321,28 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+}
+button {
+  border-radius: 3px;
+  font-size: large;
+  padding: 5px 10px;
+  margin: 10px;
+  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.59);
+}
+.modal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  max-width: 600px;
+  max-height: 600px;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-direction: column;
 }
 </style>
