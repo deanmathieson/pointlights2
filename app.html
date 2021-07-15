@@ -4,7 +4,12 @@
     {{ HEAD }}
   </head>
   <body {{ BODY_ATTRS }}>
-    <form name="contactus" netlify netlify-honeypot="bot-field" hidden>
+    <form
+      name="contactus"
+      netlify
+      netlify-honeypot="bot-field"
+      style="display:none;"
+    >
       <input type="text" name="name" />
       <input type="radio" name="email" />
       <textarea name="message"></textarea>
