@@ -1,13 +1,99 @@
 <template>
   <body style="display: flex; margin: 0">
-    <div class="buttonCont">
-      <button id="">am a button</button>
+    <div class="buttonCont z-20">
+      <button
+        :style="{
+          backgroundColor: secondaryColor,
+          border: '3px solid ' + mainColor,
+          color: mainColor,
+        }"
+        v-for="(button, i) in buttons"
+        :key="i"
+        @mouseenter="buttonEntryAnimation(i)"
+        @mouseleave="buttonExitAnimation(i)"
+        @click="buttonClick(i)"
+        ref="buttons"
+      >
+        {{ button.name }}
+      </button>
+    </div>
+    <div class="modal z-10 invisible p-2 w-full max-w-max" ref="mainModal">
+      <header>
+        <p class="text-4xl">
+          🧔🏻 Welcome to my website
+          <span
+            style="
+              -moz-transform: scale(-1, 1);
+              -webkit-transform: scale(-1, 1);
+              -o-transform: scale(-1, 1);
+              -ms-transform: scale(-1, 1);
+              transform: scale(-1, 1);
+            "
+            class="inline-block"
+            >🧔🏻
+          </span>
+        </p>
+      </header>
+
+      <section class="m-4 pt-8">
+        <h2 class="text-2xl">Manifesto</h2>
+        <p>I am a Front-End Developer with a passion for my trade.</p>
+        <p>
+          I am a practical, creative thinker who follows the motto "work
+          smarter".
+        </p>
+        <p>
+          I am an innovative and enthusiastic developer who enjoys engaging and
+          encouraging colleagues to maximise potential.
+        </p>
+      </section>
+      <section class="p-4 w-full">
+        <h2 class="text-2xl">Skills</h2>
+        <div class="skills flex flex-row flex-wrap">
+          <button
+            class="border-2 rounded-3xl bg-black"
+            v-for="(skill, i) in skills"
+            :key="i"
+            ref="skillsBtn"
+            @mouseenter="skillsAnimation(i)"
+          >
+            <span
+              class="letter"
+              :class="'letter' + i"
+              v-for="(letter, i) in skill.name"
+              :key="i"
+              ref="letters"
+              >{{ letter }}</span
+            >
+          </button>
+        </div>
+      </section>
+    </div>
+    <div class="modal z-10 invisible p-4 w-full max-w-max" ref="contactModal">
+      <p class="text-4xl">Contact me</p>
+      <form name="contactus" method="post" netlify netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contactus" />
+        <div class="p-2">
+          <label class="text-large" for="name">Name:</label>
+          <input class="text-black" type="text" name="name" required />
+        </div>
+        <div class="p-2">
+          <label class="text-large" for="email">Email:</label>
+          <input class="text-black" type="email" name="email" required />
+        </div>
+        <div class="p-2">
+          <label class="text-large" for="message">Message:</label>
+          <textarea class="text-black" name="message" required></textarea>
+        </div>
+        <button type="submit" value="Send message">Send</button>
+      </form>
     </div>
   </body>
 </template>
 
 <script>
 import * as THREE from "three";
+import gsap from "gsap";
 
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
@@ -27,6 +113,19 @@ export default {
       amountOfLights: 3,
       boxSize: 30,
       ratio: window.innerWidth / window.innerHeight,
+      mainColor: "#000",
+      secondaryColor: "#fff",
+      buttons: [{ name: "Info" }, { name: "Contact" }],
+      skills: [
+        { name: "javascript" },
+        { name: "html5" },
+        { name: "css" },
+        { name: "nuxt" },
+        { name: "flutter" },
+        { name: "vue" },
+        { name: "three.js" },
+        { name: "gsap" },
+      ],
     };
   },
   methods: {
@@ -65,7 +164,8 @@ export default {
       texture.wrapS = THREE.RepeatWrapping;
       texture.rotation = 180;
       texture.repeat.set(1, 5.5);
-
+      texture.flipX = false;
+      texture.flipY = false;
       geometry = new THREE.SphereGeometry(3, 32, 8);
       material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
@@ -125,7 +225,7 @@ export default {
     setUpText() {
       var loader = new THREE.FontLoader();
       loader.load(
-        "https://cdn.rawgit.com/mrdoob/three.js/master/examples/fonts/helvetiker_bold.typeface.json",
+        "https://cdn.skypack.dev/three/examples/fonts/helvetiker_bold.typeface.json",
         (font) => {
           var textGeo = new THREE.TextGeometry("DEAN  MATHIESON", {
             font: font,
@@ -153,7 +253,7 @@ export default {
       canvas.height = 16;
       const context = canvas.getContext("2d");
       context.fillStyle = "#ffffff";
-      context.font = 10 + "pt Arial";
+      context.font = 10 + "pt Roboto";
       context.fillText("DEAN MATHIESON", 0, canvas.height / 2 + 4);
       return canvas;
     },
@@ -161,7 +261,7 @@ export default {
       let time = performance.now() * 0.001;
       this.pointlights.forEach((pointlight) => {
         pointlight.position.x = Math.sin(time * 0.6) * (9 * this.ratio);
-        pointlight.position.y = Math.sin(time * 0.7) * (9 / this.ratio) + 10;
+        pointlight.position.y = Math.sin(time * 0.7) * 9 + 10;
         pointlight.position.z = Math.sin(time * 0.8) * 9;
         pointlight.rotation.x = time;
         pointlight.rotation.z = time;
@@ -198,7 +298,139 @@ export default {
       }
       return random;
     },
+    buttonEntryAnimation(i) {
+      gsap.to(this.$refs.buttons[i], {
+        backgroundColor: this.mainColor,
+        borderColor: this.secondaryColor,
+        color: this.secondaryColor,
+        duration: 0.8,
+      });
+    },
+    buttonExitAnimation(i) {
+      gsap.to(this.$refs.buttons[i], {
+        backgroundColor: this.secondaryColor,
+        borderColor: this.mainColor,
+        color: this.mainColor,
+        duration: 0.8,
+      });
+    },
+    buttonClick(i) {
+      let buttonLocation = this.$refs.buttons[i].getBoundingClientRect();
+      let modal = i === 0 ? this.$refs.mainModal : this.$refs.contactModal;
+      let visible = modal.showing ? "hidden" : "visible";
+      let modals = [this.$refs.mainModal, this.$refs.contactModal];
+      if (!modal.showing)
+        gsap.fromTo(
+          modal,
+          {
+            top: buttonLocation.top,
+            left: buttonLocation.left,
+          },
+          {
+            visibility: visible,
+            top: "50%",
+            left: "50%",
+            opacity: 1,
+            onComplete: () => {
+              let delay = 0;
+              modal.children.forEach((item) => {
+                gsap.to(item, { opacity: 1, duration: 0.5, delay: delay });
+                delay = delay + 0.4;
+              });
+            },
+          }
+        );
+      else {
+        let delay = 0;
+        let i = modal.children.length;
+        while (i !== 0) {
+          gsap.to(modal.children[i - 1], {
+            opacity: 0,
+            duration: 0.5,
+            delay: delay,
+          });
+          delay = delay + 0.2;
+          i--;
+        }
+        gsap.fromTo(
+          modal,
+          { top: "50%", left: "50%" },
+          {
+            top: buttonLocation.top,
+            left: buttonLocation.left,
+            opacity: 0,
+            delay: delay + 0.2,
+          }
+        );
+      }
+      //modal tidy up
+      modals.forEach((mod) => {
+        if (mod.showing && mod !== modal) {
+          let delay = 0;
+          let i = mod.children.length;
+          while (i !== 0) {
+            gsap.to(mod.children[i - 1], {
+              opacity: 0,
+              duration: 0.5,
+              delay: delay,
+            });
+            delay = delay + 0.2;
+            i--;
+          }
+          gsap.fromTo(
+            mod,
+            { top: "50%", left: "50%" },
+            {
+              top: buttonLocation.top,
+              left: buttonLocation.left,
+              opacity: 0,
+              delay: delay + 0.2,
+            }
+          );
+          mod.showing = !mod.showing;
+        }
+      });
+      modal.showing = !modal.showing;
+    },
+    skillsAnimation(i) {
+      let delay = 0.2;
+      this.$refs.skillsBtn[i].children.forEach((letter) => {
+        if (!letter.animating) {
+          gsap.fromTo(
+            letter,
+            { color: "#fff" },
+            {
+              color: this.colourGenerator(),
+              delay: delay,
+              yoyo: true,
+              duration: 1,
+              repeat: 1,
+              onStart: () => (letter.animating = true),
+              onComplete: () => (letter.animating = false),
+            }
+          );
+          delay = delay + 0.2;
+        }
+      });
+      if (!this.$refs.skillsBtn[i].animating) {
+        gsap.fromTo(
+          this.$refs.skillsBtn[i],
+          {
+            borderColor: "#fff",
+          },
+          {
+            borderColor: this.colourGenerator(),
+            yoyo: true,
+            duration: 2,
+            repeat: 1,
+            onStart: () => (this.$refs.skillsBtn[i].animating = true),
+            onComplete: () => (this.$refs.skillsBtn[i].animating = false),
+          }
+        );
+      }
+    },
   },
+
   mounted() {
     this.setUpCamera();
     this.setUpLights();
@@ -212,10 +444,49 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
+* {
+  font-family: "Roboto", sans;
+}
 .buttonCont {
   position: absolute;
   top: 0;
   right: 0;
+}
+button {
+  border-radius: 3px;
+  font-size: large;
+  padding: 5px 10px;
+  margin: 10px;
+  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.59);
+}
+.modal {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
+  flex-wrap: wrap;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-direction: column;
+}
+.modal > * {
+  opacity: 0;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+form label {
+  width: 40%;
+}
+form input {
+  width: 60%;
+}
+form div {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
