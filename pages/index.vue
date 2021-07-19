@@ -24,22 +24,12 @@
       <header>
         <p class="text-4xl">
           🧔🏻 Welcome to my website
-          <span
-            style="
-              -moz-transform: scale(-1, 1);
-              -webkit-transform: scale(-1, 1);
-              -o-transform: scale(-1, 1);
-              -ms-transform: scale(-1, 1);
-              transform: scale(-1, 1);
-            "
-            class="inline-block"
-            >🧔🏻
-          </span>
+          <span class="inline-block">🧔🏻 </span>
         </p>
       </header>
 
-      <section class="m-4 pt-8">
-        <h2 class="text-2xl">Manifesto</h2>
+      <section class="m-4 pt-4">
+        <h2 class="text-2xl text-center pb-4 underline">Manifesto</h2>
         <p>I am a Front-End Developer with a passion for my trade.</p>
         <p>
           I am a practical, creative thinker who follows the motto "work
@@ -51,10 +41,10 @@
         </p>
       </section>
       <section class="p-4 w-full">
-        <h2 class="text-2xl">Skills</h2>
-        <div class="skills flex flex-row flex-wrap">
+        <h2 class="text-2xl text-center">Skills</h2>
+        <div class="skills flex flex-row flex-wrap justify-center">
           <button
-            class="border-2 rounded-3xl bg-black"
+            class="border-2 rounded-3xl bg-black opacity-0"
             v-for="(skill, i) in skills"
             :key="i"
             ref="skillsBtn"
@@ -77,7 +67,10 @@
       ref="contactModal"
     >
       <div>
-        <p class="text-4xl">Contact me</p>
+        <p class="text-4xl">
+          📧 Contact me
+          <span class="inline-block reversed">📧 </span>
+        </p>
       </div>
       <form
         name="contactus"
@@ -87,15 +80,15 @@
         class="w-full p-4"
       >
         <input type="hidden" name="form-name" value="contactus" />
-        <div class="p-4">
+        <div class="p-4 opacity-0">
           <label class="text-lg" for="name">Name:</label>
           <input class="text-black" type="text" name="name" required />
         </div>
-        <div class="p-4">
+        <div class="p-4 opacity-0">
           <label class="text-lg" for="email">Email:</label>
           <input class="text-black" type="email" name="email" required />
         </div>
-        <div class="p-4">
+        <div class="p-4 opacity-0">
           <label class="text-lg" for="message">Message:</label>
           <textarea class="text-black" name="message" required></textarea>
         </div>
@@ -343,8 +336,8 @@ export default {
     },
     buttonClick(i) {
       let modals = [this.$refs.mainModal, this.$refs.contactModal];
-      modals[i].style.zIndex = this.zIndex;
       this.zIndex++;
+      modals[i].style.zIndex = this.zIndex;
       //showing modal
       this.tl.forEach((tl) => {
         if (tl._time > 0) {
@@ -426,6 +419,7 @@ export default {
               {
                 x: 50,
                 y: 5,
+                opacity: 0,
               },
               {
                 y: 0,
@@ -436,6 +430,26 @@ export default {
                 },
               }
             );
+            if (child.children.length > 0) {
+              child.children.forEach((child) => {
+                this.tl[i].fromTo(
+                  child,
+                  {
+                    x: 50,
+                    y: 5,
+                    opacity: 0,
+                  },
+                  {
+                    y: 0,
+                    x: 0,
+                    opacity: 1,
+                    onComplete: () => {
+                      this.tl[i].animating = false;
+                    },
+                  }
+                );
+              });
+            }
           });
         });
         this.tl[i].modal = modals[i];
@@ -504,5 +518,12 @@ form textarea {
 form div {
   display: flex;
   justify-content: space-around;
+}
+.reversed {
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
 }
 </style>
