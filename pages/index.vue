@@ -127,7 +127,7 @@ export default {
         { name: "gsap" },
       ],
       tl: [],
-      zIndex: 10,
+      zIndex: 20,
     };
   },
   methods: {
@@ -320,11 +320,21 @@ export default {
       let modals = [this.$refs.mainModal, this.$refs.contactModal];
       modals[i].style.zIndex = this.zIndex;
       this.zIndex++;
-      console.log(this.zIndex);
       //showing modal
       this.tl.forEach((tl) => {
         if (tl._time > 0) {
-          tl.reverse();
+          if (this.tl[i] === tl) {
+            if (tl.animating) {
+              tl.pause();
+              tl.play();
+            } else {
+              tl.reverse();
+              tl.animating = true;
+            }
+          } else {
+            tl.reverse();
+            tl.animating = true;
+          }
         }
       });
       if (this.tl[i]._time === 0) this.tl[i].play();
@@ -386,7 +396,12 @@ export default {
         );
         modals[i].children.forEach((item) => {
           item.children.forEach((child) => {
-            this.tl[i].to(child, { opacity: 1 });
+            this.tl[i].to(child, {
+              opacity: 1,
+              onComplete: () => {
+                this.tl[i].animating = false;
+              },
+            });
           });
         });
         this.tl[i].modal = modals[i];
