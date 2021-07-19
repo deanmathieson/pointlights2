@@ -17,7 +17,10 @@
         {{ button.name }}
       </button>
     </div>
-    <div class="modal z-10 invisible p-2 w-full max-w-max" ref="mainModal">
+    <div
+      class="modal invisible p-2 max-w-max w-full max-w-prose"
+      ref="mainModal"
+    >
       <header>
         <p class="text-4xl">
           🧔🏻 Welcome to my website
@@ -69,25 +72,45 @@
         </div>
       </section>
     </div>
-    <div class="modal z-10 invisible p-4 w-full max-w-max" ref="contactModal">
+    <div
+      class="modal invisible p-4 max-w-max w-full max-w-prose"
+      ref="contactModal"
+    >
       <div>
         <p class="text-4xl">Contact me</p>
       </div>
-      <form name="contactus" method="post" netlify netlify-honeypot="bot-field">
+      <form
+        name="contactus"
+        method="post"
+        netlify
+        netlify-honeypot="bot-field"
+        class="w-full p-4"
+      >
         <input type="hidden" name="form-name" value="contactus" />
-        <div class="p-2">
-          <label class="text-large" for="name">Name:</label>
+        <div class="p-4">
+          <label class="text-lg" for="name">Name:</label>
           <input class="text-black" type="text" name="name" required />
         </div>
-        <div class="p-2">
-          <label class="text-large" for="email">Email:</label>
+        <div class="p-4">
+          <label class="text-lg" for="email">Email:</label>
           <input class="text-black" type="email" name="email" required />
         </div>
-        <div class="p-2">
-          <label class="text-large" for="message">Message:</label>
+        <div class="p-4">
+          <label class="text-lg" for="message">Message:</label>
           <textarea class="text-black" name="message" required></textarea>
         </div>
-        <button type="submit" value="Send message">Send</button>
+        <button
+          :style="{
+            backgroundColor: secondaryColor,
+            border: '3px solid ' + mainColor,
+            color: mainColor,
+          }"
+          refs="buttons"
+          type="submit"
+          value="Send message"
+        >
+          Send
+        </button>
       </form>
     </div>
   </body>
@@ -398,15 +421,25 @@ export default {
         );
         modals[i].children.forEach((item) => {
           item.children.forEach((child) => {
-            this.tl[i].to(child, {
-              opacity: 1,
-              onComplete: () => {
-                this.tl[i].animating = false;
+            this.tl[i].fromTo(
+              child,
+              {
+                x: 50,
+                y: 5,
               },
-            });
+              {
+                y: 0,
+                x: 0,
+                opacity: 1,
+                onComplete: () => {
+                  this.tl[i].animating = false;
+                },
+              }
+            );
           });
         });
         this.tl[i].modal = modals[i];
+        this.tl[i].duration(2);
         this.tl[i].pause();
       }
     },
@@ -464,7 +497,8 @@ form {
 form label {
   width: 40%;
 }
-form input {
+form input,
+form textarea {
   width: 60%;
 }
 form div {
