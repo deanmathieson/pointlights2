@@ -126,6 +126,8 @@ export default {
         { name: "three.js" },
         { name: "gsap" },
       ],
+      tl: [],
+      zIndex: 10,
     };
   },
   methods: {
@@ -315,82 +317,17 @@ export default {
       });
     },
     buttonClick(i) {
-      let buttonLocation = this.$refs.buttons[i].getBoundingClientRect();
-      let modal = i === 0 ? this.$refs.mainModal : this.$refs.contactModal;
-      let visible = modal.showing ? "hidden" : "visible";
       let modals = [this.$refs.mainModal, this.$refs.contactModal];
-      if (!modal.showing)
-        gsap.fromTo(
-          modal,
-          {
-            top: buttonLocation.top,
-            left: buttonLocation.left,
-          },
-          {
-            visibility: visible,
-            top: "50%",
-            left: "50%",
-            opacity: 1,
-            onComplete: () => {
-              let delay = 0;
-              modal.children.forEach((item) => {
-                gsap.to(item, { opacity: 1, duration: 0.5, delay: delay });
-                delay = delay + 0.4;
-              });
-            },
-          }
-        );
-      else {
-        let delay = 0;
-        let i = modal.children.length;
-        while (i !== 0) {
-          gsap.to(modal.children[i - 1], {
-            opacity: 0,
-            duration: 0.5,
-            delay: delay,
-          });
-          delay = delay + 0.2;
-          i--;
-        }
-        gsap.fromTo(
-          modal,
-          { top: "50%", left: "50%" },
-          {
-            top: buttonLocation.top,
-            left: buttonLocation.left,
-            opacity: 0,
-            delay: delay + 0.2,
-          }
-        );
-      }
-      //modal tidy up
-      modals.forEach((mod) => {
-        if (mod.showing && mod !== modal) {
-          let delay = 0;
-          let i = mod.children.length;
-          while (i !== 0) {
-            gsap.to(mod.children[i - 1], {
-              opacity: 0,
-              duration: 0.5,
-              delay: delay,
-            });
-            delay = delay + 0.2;
-            i--;
-          }
-          gsap.fromTo(
-            mod,
-            { top: "50%", left: "50%" },
-            {
-              top: buttonLocation.top,
-              left: buttonLocation.left,
-              opacity: 0,
-              delay: delay + 0.2,
-            }
-          );
-          mod.showing = !mod.showing;
+      modals[i].style.zIndex = this.zIndex;
+      this.zIndex++;
+      console.log(this.zIndex);
+      //showing modal
+      this.tl.forEach((tl) => {
+        if (tl._time > 0) {
+          tl.reverse();
         }
       });
-      modal.showing = !modal.showing;
+      if (this.tl[i]._time === 0) this.tl[i].play();
     },
     skillsAnimation(i) {
       let delay = 0.2;
@@ -429,6 +366,33 @@ export default {
         );
       }
     },
+    setUpModalAnimations() {
+      let modals = [this.$refs.mainModal, this.$refs.contactModal];
+      for (let i = 0; i < this.$refs.buttons.length; i++) {
+        let buttonLocation = this.$refs.buttons[i].getBoundingClientRect();
+        this.tl[i] = gsap.timeline();
+        this.tl[i].fromTo(
+          modals[i],
+          {
+            top: buttonLocation.top,
+            left: buttonLocation.left,
+            zIndex: this.zIndex,
+          },
+          {
+            visibility: "visible",
+            top: "50%",
+            left: "50%",
+          }
+        );
+        modals[i].children.forEach((item) => {
+          item.children.forEach((child) => {
+            this.tl[i].to(child, { opacity: 1 });
+          });
+        });
+        this.tl[i].modal = modals[i];
+        this.tl[i].pause();
+      }
+    },
   },
 
   mounted() {
@@ -440,6 +404,7 @@ export default {
     this.setUpMesh();
     this.setUpText();
     this.setUpResizeHandler();
+    this.setUpModalAnimations();
     this.animate();
   },
 };
@@ -471,7 +436,7 @@ button {
   color: white;
   flex-direction: column;
 }
-.modal > * {
+.modal > * > * {
   opacity: 0;
 }
 form {
