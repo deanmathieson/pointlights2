@@ -70,7 +70,9 @@
       </section>
     </div>
     <div class="modal z-10 invisible p-4 w-full max-w-max" ref="contactModal">
-      <p class="text-4xl">Contact me</p>
+      <div>
+        <p class="text-4xl">Contact me</p>
+      </div>
       <form name="contactus" method="post" netlify netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="contactus" />
         <div class="p-2">
