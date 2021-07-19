@@ -23,7 +23,7 @@
     >
       <header>
         <p class="text-4xl">
-          🧔🏻 Welcome to my website
+          <span>🧔🏻</span><span> Welcome to my website</span>
           <span class="inline-block">🧔🏻 </span>
         </p>
       </header>
@@ -68,7 +68,7 @@
     >
       <div>
         <p class="text-4xl">
-          📧 Contact me
+          <span>📧</span><span> Contact me</span>
           <span class="inline-block reversed">📧 </span>
         </p>
       </div>
