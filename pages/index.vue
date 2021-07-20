@@ -3,9 +3,9 @@
     <div class="buttonCont z-20">
       <button
         :style="{
-          backgroundColor: secondaryColor,
-          border: '3px solid ' + mainColor,
-          color: mainColor,
+          backgroundColor: colours[1].hex,
+          border: '3px solid ' + colours[0].hex,
+          color: '#000',
         }"
         v-for="(button, i) in buttons"
         :key="i"
@@ -20,6 +20,10 @@
     <div
       class="modal invisible p-2 max-w-max w-full max-w-prose"
       ref="mainModal"
+      :style="{
+        backgroundColor: colours[0].rgba,
+        border: '3px solid ' + colours[1].hex,
+      }"
     >
       <header>
         <p class="text-4xl">
@@ -27,9 +31,10 @@
           <span class="inline-block">🧔🏻 </span>
         </p>
       </header>
-
+      <section class="pt-4">
+        <img class="max-h-48" src="~/assets/dean.jpg" />
+      </section>
       <section class="m-4 pt-4">
-        <h2 class="text-2xl text-center pb-4 underline">Manifesto</h2>
         <p>I am a Front-End Developer with a passion for my trade.</p>
         <p>
           I am a practical, creative thinker who follows the motto "work
@@ -41,10 +46,10 @@
         </p>
       </section>
       <section class="p-4 w-full">
-        <h2 class="text-2xl text-center">Skills</h2>
+        <h2 class="text-2xl text-center underline pb-4">Skills</h2>
         <div class="skills flex flex-row flex-wrap justify-center">
           <button
-            class="border-2 rounded-3xl bg-black opacity-0"
+            class="border-2 rounded-3xl bg-black opacity-0 text-white"
             v-for="(skill, i) in skills"
             :key="i"
             ref="skillsBtn"
@@ -64,6 +69,10 @@
     </div>
     <div
       class="modal invisible p-4 max-w-max w-full max-w-prose"
+      :style="{
+        backgroundColor: colours[1].rgba,
+        border: '3px solid ' + colours[0].hex,
+      }"
       ref="contactModal"
     >
       <div>
@@ -94,13 +103,15 @@
         </div>
         <button
           :style="{
-            backgroundColor: secondaryColor,
-            border: '3px solid ' + mainColor,
-            color: mainColor,
+            backgroundColor: colours[1].hex,
+            border: '3px solid ' + colours[0].hex,
+            color: '#000',
           }"
-          refs="buttons"
+          ref="sendBtn"
           type="submit"
           value="Send message"
+          @mouseenter="sendEnter"
+          @mouseleave="sendLeave"
         >
           Send
         </button>
@@ -131,8 +142,13 @@ export default {
       amountOfLights: 3,
       boxSize: 30,
       ratio: window.innerWidth / window.innerHeight,
-      mainColor: "#000",
-      secondaryColor: "#fff",
+      mainColor: "#1de9b6",
+      secondaryColor: "#ffc107",
+      colours: [
+        { hex: "#1de9b6", rgba: "RGBA(29,233,182,0.7)" },
+        { hex: "#ffc107", rgba: "RGBA(255,193,7,.7)" },
+        { hex: "#e91e63", rgba: "RGBA(233,30,99,1)" },
+      ],
       buttons: [{ name: "Info" }, { name: "Contact" }],
       skills: [
         { name: "javascript" },
@@ -209,7 +225,7 @@ export default {
     },
     setUpLights() {
       for (let i = 0; i < this.amountOfLights; i++) {
-        this.pointlights.push(this.createLight(this.colourGenerator()));
+        this.pointlights.push(this.createLight(this.colours[i].hex));
       }
       this.pointlights.forEach((pointlight) => {
         this.scene.add(pointlight);
@@ -320,17 +336,15 @@ export default {
     },
     buttonEntryAnimation(i) {
       gsap.to(this.$refs.buttons[i], {
-        backgroundColor: this.mainColor,
-        borderColor: this.secondaryColor,
-        color: this.secondaryColor,
+        backgroundColor: this.colours[0].hex,
+        borderColor: this.colours[1].hex,
         duration: 0.8,
       });
     },
     buttonExitAnimation(i) {
       gsap.to(this.$refs.buttons[i], {
-        backgroundColor: this.secondaryColor,
-        borderColor: this.mainColor,
-        color: this.mainColor,
+        backgroundColor: this.colours[1].hex,
+        borderColor: this.colours[0].hex,
         duration: 0.8,
       });
     },
@@ -342,6 +356,7 @@ export default {
       this.tl.forEach((tl) => {
         if (tl._time > 0) {
           if (this.tl[i] === tl) {
+            tl.duration(2);
             if (tl.animating) {
               tl.pause();
               tl.play();
@@ -350,6 +365,7 @@ export default {
               tl.animating = true;
             }
           } else {
+            tl.duration(0.5);
             tl.reverse();
             tl.animating = true;
           }
@@ -457,6 +473,21 @@ export default {
         this.tl[i].pause();
       }
     },
+    sendEnter() {
+      console.log("enter happens");
+      gsap.to(this.$refs.sendBtn, {
+        backgroundColor: this.colours[0].hex,
+        borderColor: this.colours[1].hex,
+        duration: 0.8,
+      });
+    },
+    sendLeave() {
+      gsap.to(this.$refs.sendBtn, {
+        backgroundColor: this.colours[1].hex,
+        borderColor: this.colours[0].hex,
+        duration: 0.8,
+      });
+    },
   },
 
   mounted() {
@@ -497,8 +528,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: black;
   flex-direction: column;
+  font-weight: bold;
 }
 .modal > * > * {
   opacity: 0;
@@ -525,5 +557,8 @@ form div {
   -o-transform: scale(-1, 1);
   -ms-transform: scale(-1, 1);
   transform: scale(-1, 1);
+}
+button {
+  font-weight: bold;
 }
 </style>
