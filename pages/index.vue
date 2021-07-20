@@ -1,11 +1,12 @@
 <template>
   <body style="display: flex; margin: 0">
-    <div class="buttonCont z-20">
+    <div class="buttonCont" style="z-index: 99999">
       <button
         :style="{
           backgroundColor: colours[1].hex,
           border: '3px solid ' + colours[2].hex,
           color: '#000',
+          zIndex: '99999',
         }"
         v-for="(button, i) in buttons"
         :key="i"
@@ -40,10 +41,10 @@
           <span class="inline-block">🧔🏻 </span>
         </p>
       </header>
-      <section class="">
-        <img class="max-h-48" src="~/assets/dean.jpg" />
+      <section>
+        <img class="max-h-48 visible md:w-4" src="~/assets/dean.jpg" />
       </section>
-      <section class="m-4">
+      <section>
         <p>I am a Front-End Developer with a passion for my trade.</p>
         <p>
           I am a practical, creative thinker who follows the motto "work
@@ -570,5 +571,8 @@ form div {
 }
 button {
   font-weight: bold;
+}
+header {
+  text-align: center;
 }
 </style>
