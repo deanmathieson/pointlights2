@@ -4,7 +4,7 @@
       <button
         :style="{
           backgroundColor: colours[1].hex,
-          border: '3px solid ' + colours[0].hex,
+          border: '3px solid ' + colours[2].hex,
           color: '#000',
         }"
         v-for="(button, i) in buttons"
@@ -18,11 +18,20 @@
       </button>
     </div>
     <div
-      class="modal invisible p-2 max-w-max w-full max-w-prose"
+      class="
+        modal
+        invisible
+        p-4
+        max-w-max
+        w-full
+        max-w-prose
+        flex flex-col
+        space-y-4
+      "
       ref="mainModal"
       :style="{
         backgroundColor: colours[0].rgba,
-        border: '3px solid ' + colours[1].hex,
+        border: '3px solid ' + colours[2].hex,
       }"
     >
       <header>
@@ -31,10 +40,10 @@
           <span class="inline-block">🧔🏻 </span>
         </p>
       </header>
-      <section class="pt-4">
+      <section class="">
         <img class="max-h-48" src="~/assets/dean.jpg" />
       </section>
-      <section class="m-4 pt-4">
+      <section class="m-4">
         <p>I am a Front-End Developer with a passion for my trade.</p>
         <p>
           I am a practical, creative thinker who follows the motto "work
@@ -45,7 +54,7 @@
           encouraging colleagues to maximise potential.
         </p>
       </section>
-      <section class="p-4 w-full">
+      <section class="w-full">
         <h2 class="text-2xl text-center underline pb-4">Skills</h2>
         <div class="skills flex flex-row flex-wrap justify-center">
           <button
@@ -68,10 +77,10 @@
       </section>
     </div>
     <div
-      class="modal invisible p-4 max-w-max w-full max-w-prose"
+      class="modal invisible max-w-max w-full max-w-prose p-4"
       :style="{
-        backgroundColor: colours[1].rgba,
-        border: '3px solid ' + colours[0].hex,
+        backgroundColor: colours[0].rgba,
+        border: '3px solid ' + colours[2].hex,
       }"
       ref="contactModal"
     >
@@ -86,25 +95,25 @@
         method="post"
         netlify
         netlify-honeypot="bot-field"
-        class="w-full p-4"
+        class="w-full flex flex-col space-y-4"
       >
         <input type="hidden" name="form-name" value="contactus" />
-        <div class="p-4 opacity-0">
+        <div class="opacity-0">
           <label class="text-lg" for="name">Name:</label>
           <input class="text-black" type="text" name="name" required />
         </div>
-        <div class="p-4 opacity-0">
+        <div class="opacity-0">
           <label class="text-lg" for="email">Email:</label>
           <input class="text-black" type="email" name="email" required />
         </div>
-        <div class="p-4 opacity-0">
+        <div class="opacity-0">
           <label class="text-lg" for="message">Message:</label>
           <textarea class="text-black" name="message" required></textarea>
         </div>
         <button
           :style="{
             backgroundColor: colours[1].hex,
-            border: '3px solid ' + colours[0].hex,
+            border: '3px solid ' + colours[2].hex,
             color: '#000',
           }"
           ref="sendBtn"
@@ -336,7 +345,7 @@ export default {
     },
     buttonEntryAnimation(i) {
       gsap.to(this.$refs.buttons[i], {
-        backgroundColor: this.colours[0].hex,
+        backgroundColor: this.colours[2].hex,
         borderColor: this.colours[1].hex,
         duration: 0.8,
       });
@@ -344,7 +353,7 @@ export default {
     buttonExitAnimation(i) {
       gsap.to(this.$refs.buttons[i], {
         backgroundColor: this.colours[1].hex,
-        borderColor: this.colours[0].hex,
+        borderColor: this.colours[2].hex,
         duration: 0.8,
       });
     },
@@ -474,9 +483,8 @@ export default {
       }
     },
     sendEnter() {
-      console.log("enter happens");
       gsap.to(this.$refs.sendBtn, {
-        backgroundColor: this.colours[0].hex,
+        backgroundColor: this.colours[2].hex,
         borderColor: this.colours[1].hex,
         duration: 0.8,
       });
@@ -484,7 +492,7 @@ export default {
     sendLeave() {
       gsap.to(this.$refs.sendBtn, {
         backgroundColor: this.colours[1].hex,
-        borderColor: this.colours[0].hex,
+        borderColor: this.colours[2].hex,
         duration: 0.8,
       });
     },
@@ -531,6 +539,7 @@ button {
   color: black;
   flex-direction: column;
   font-weight: bold;
+  border-radius: 10px;
 }
 .modal > * > * {
   opacity: 0;
@@ -546,6 +555,7 @@ form label {
 form input,
 form textarea {
   width: 60%;
+  padding: 5px;
 }
 form div {
   display: flex;
