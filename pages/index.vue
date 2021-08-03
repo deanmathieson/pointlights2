@@ -36,13 +36,13 @@
       }"
     >
       <header>
-        <p class="text-4xl">
+        <p class="text-3xl">
           <span>🧔🏻</span><span> Welcome to my website</span>
           <span class="inline-block">🧔🏻 </span>
         </p>
       </header>
       <section>
-        <img class="max-h-48 visible md:w-4" src="~/assets/dean.jpg" />
+        <img class="max-h-48 visible md:w-48 m-4" src="~/assets/dean.jpg" />
       </section>
       <section>
         <p>I am a Front-End Developer with a passion for my trade.</p>
@@ -86,7 +86,7 @@
       ref="contactModal"
     >
       <div>
-        <p class="text-4xl">
+        <p class="text-3xl">
           <span>📧</span><span> Contact me</span>
           <span class="inline-block reversed">📧 </span>
         </p>
