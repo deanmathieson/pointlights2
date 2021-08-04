@@ -168,6 +168,7 @@ export default {
         { name: "threeJS" },
         { name: "gsap" },
         { name: "netlify" },
+        { name: "nodeJS" },
       ],
       tl: [],
       zIndex: 20,
